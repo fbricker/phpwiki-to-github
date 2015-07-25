@@ -9,7 +9,7 @@ function getDataBetweenTokens($data,$open,$close){
 		$aux = explode($close,$part,2);
 		if(count($aux)==1) continue;
 		if(substr_count($aux[0],"\n")>0) continue;
-		if(isBlacklisted($aux[0])) continue;
+		if(!isAllowed($aux[0])) continue;
 		$res[]=$aux[0];
 	}
 	return $res;
@@ -31,6 +31,7 @@ function parsePage($data,$page){
 
 function getPage($page){
 	global $base;
+	if(isBlacklisted($page)) return '';
 	$data = file_get_contents($base.urlencode(utf8_decode(($page['name']))));
 	savePage($page,$data);
 	return $data;

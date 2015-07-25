@@ -15,18 +15,28 @@ $base = "http://wiki.dokkogroup.com.ar/convert/?page=";
 $newBlacklist = array();
 @mkdir("data");
 
+function isAllowed($page){
+	if(strpos($page,"http://")===0) return false;
+	if(strpos($page,"https://")===0) return false;
+	if(strpos($page,"#")===0) return false;
+	if(strpos($page,"[")!==false) return false;
+	return true;
+}
+
 function isBlacklisted($page){
 	global $blacklist;
-	if(strpos($page,"http://")===0) return true;
-	if(strpos($page,"https://")===0) return true;
-	if(strpos($page,"#")===0) return true;
-	if(strpos($page,"[")!==false) return true;
-	return in_array(utf8_encode($page), $blacklist);
+	if(is_array($page)){
+		$name=$page['name'];
+	}else{
+		$name=utf8_encode($page);
+	}
+	return in_array($name, $blacklist);
 }
 
 
 function savePage($page,$data){
 	global $newBlacklist;
+	if(isBlacklisted($page)) return;
 	echo "salvando ".$page['name']." como: ".$page['normal']."\n";
 	if(empty($data)) {
 		echo "[WARNING] la pagina esta vacia (talvez la quieras poner en blacklist?)\n";
