@@ -35,6 +35,7 @@ function getDataBetweenTokens($data,$open,$close){
 function parsePage($data){
 	$data=str_replace("#[|","[",$data);
 	$data=str_replace("~[","",$data);
+	$data=str_replace("~]","",$data);
 	$links1 = getDataBetweenTokens($data,"[[","]]");
 	$links2 = getDataBetweenTokens($data,"](",")");
 	$links3 = getDataBetweenTokens($data,"|","]");
