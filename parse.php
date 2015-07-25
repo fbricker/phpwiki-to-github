@@ -1,5 +1,7 @@
 <?php
 require_once 'common.php';
+global $base;
+$base = "http://your-wiki-host.com/convert/?page=";
 
 function getDataBetweenTokens($data,$open,$close){
 	$arr = explode($open," ".$data);

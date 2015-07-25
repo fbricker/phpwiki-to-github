@@ -1,5 +1,5 @@
 <?php
-global $base,$list,$blacklist,$newBlacklist;
+global $list,$blacklist,$newBlacklist;
 
 $blacklist = array();
 if(file_exists("blacklist.txt")){
@@ -11,7 +11,6 @@ if(file_exists("database.txt")){
 	@$list = json_decode(file_get_contents("database.txt"),true);	
 }
 
-$base = "http://wiki.dokkogroup.com.ar/convert/?page=";
 $newBlacklist = array();
 @mkdir("data");
 
