@@ -19,7 +19,7 @@ function guessLang($data){
 	return '';
 }
 
-function saveDataBetweenTokens($data,$open,$close){
+function saveDataBetweenTokens($data,$open,$close,$lang=null){
 	global $replaces,$repCount;
 	$arr = explode($open," ".$data);
 	unset($arr[0]);
@@ -27,7 +27,7 @@ function saveDataBetweenTokens($data,$open,$close){
 		$aux = explode($close,$part,2);
 		if(count($aux)==1) continue;
 		$newClose='```';
-		$newOpen='```'.guessLang($aux[0]);
+		$newOpen='```'.($lang==null?guessLang($aux[0]):$lang);
 		
 		$k="REPLACEMMMMREPLACEMMM".$repCount++."KKKK";
 		$data=str_replace($open.$aux[0].$close,$k,$data);
@@ -39,6 +39,7 @@ function saveDataBetweenTokens($data,$open,$close){
 }
 
 function replaceCodeBlocks($data){
+	$data = saveDataBetweenTokens($data,'<?plugin PhpHighlight','?>','php');
 	$data = saveDataBetweenTokens($data,"<pre>","</pre>");
 	$data = saveDataBetweenTokens($data,"<verbatim>","</verbatim>");
 	return $data;
