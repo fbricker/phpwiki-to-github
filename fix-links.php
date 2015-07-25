@@ -4,7 +4,7 @@ require_once 'common.php';
 function fixLinks($page){
 	global $list;
 	$original = $data = file_get_contents(getFileName($page));
-	
+
 	foreach($list as $link){
 		$name = utf8_decode($link['name']);
 		$normal = $link['normal'];
@@ -15,6 +15,7 @@ function fixLinks($page){
 		$data=str_replace("[[$name]]","[[$normal]]",$data);
 		$data=str_replace("]($name)","]($normal)",$data);
 		$data=str_replace("|$name]","]($normal)",$data);
+		$data=str_replace("]($name#","]($normal#",$data);
 	}
 
 	$data=str_replace("~[","[",$data);

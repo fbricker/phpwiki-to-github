@@ -15,7 +15,7 @@ function getDataBetweenTokens($data,$open,$close){
 	return $res;
 }
 
-function parsePage($data){
+function parsePage($data,$page){
 	$data=str_replace("#[|","[",$data);
 	$data=str_replace("~[","",$data);
 	$data=str_replace("~]","",$data);
@@ -23,7 +23,10 @@ function parsePage($data){
 	$links2 = getDataBetweenTokens($data,"](",")");
 	$links3 = getDataBetweenTokens($data,"|","]");
 	$res = array_merge($links1,$links2,$links3);
-	foreach ($res as $name) addPage($name);
+	foreach ($res as $name) {
+		if(strpos($name,"#")!==false) $name=substr($name,0, strpos($name,"#"));
+		addPage($name,utf8_decode($page['name']));
+	}
 }
 
 function getPage($page){
@@ -33,13 +36,13 @@ function getPage($page){
 	return $data;
 }
 
-function addPage($page){
+function addPage($page,$from=''){
 	global $list;
 	$normal = normalizeName($page);
-	if(!isset($list[$normal])) $list[$normal]=array("name"=>utf8_encode($page),"normal"=>$normal);
+	if(!isset($list[$normal])) $list[$normal]=array("name"=>utf8_encode($page),"normal"=>$normal,"who"=>utf8_encode($from));
 }
 
-addPage("Denko");
+if(!empty($argv[1])) addPage($argv[1],'[[console/manual]]');
 
 foreach($list as $page){
 	if(!exists($page)) {
@@ -47,7 +50,7 @@ foreach($list as $page){
 	}else{
 		$data = file_get_contents(getFileName($page));
 	}
-	parsePage($data);
+	parsePage($data,$page);
 }
 
 echo "listo!!!\n";
@@ -56,7 +59,7 @@ if(count($newBlacklist)>0){
 	print_r($newBlacklist);
 	$nb = "";
 	foreach($newBlacklist as $new){
-		$nb.="$new\n";
+		$nb.=$new["page"]."\n";
 	}
 	file_put_contents("newBlacklist.txt", $nb);
 }

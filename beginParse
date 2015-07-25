@@ -1,12 +1,19 @@
 #!/bin/bash
 dir=`dirname "$0"`
 cd "$dir"
+if [ "$1" == "" ]; then
+	echo "ERROR: Missing start page".
+	echo "Use mode: $0 (start page)"
+	echo "Example: $0 Denko"
+	echo "Example: $0 \"CMS ServiciosWeb\""
+	exit
+fi
 
 counter=7
-
 ./clear
+
 while [ ! -f "newBlacklist.txt" -a $counter -gt 0 ]; do
-	php parse.php
+	php parse.php "$1"
 	counter=`expr $counter - 1`
 done
 

@@ -20,6 +20,7 @@ function isBlacklisted($page){
 	if(strpos($page,"http://")===0) return true;
 	if(strpos($page,"https://")===0) return true;
 	if(strpos($page,"#")===0) return true;
+	if(strpos($page,"[")!==false) return true;
 	return in_array(utf8_encode($page), $blacklist);
 }
 
@@ -29,7 +30,7 @@ function savePage($page,$data){
 	echo "salvando ".$page['name']." como: ".$page['normal']."\n";
 	if(empty($data)) {
 		echo "[WARNING] la pagina esta vacia (talvez la quieras poner en blacklist?)\n";
-		$newBlacklist[]=$page['name'];
+		$newBlacklist[]=array("name"=>$page['name'],"who"=>$page['who']);
 		return;
 	}
 	file_put_contents(getFileName($page),$data);
@@ -48,7 +49,7 @@ function removeAccents($cadena){
 }
 
 function normalizeName($name){
-    $name = strip_tags(str_replace(array("\r","\t","\n","@",":",";",'"',"'"," ","“","”","`","´","?","¿","%","/"),'-',$name));
+    $name = strip_tags(str_replace(array("\r","\t","\n","@","[","]",":",";",'"',"'"," ","“","”","`","´","?","¿","%","/"),'-',$name));
     return removeAccents(preg_replace('/[\-]{2,}/','-',$name));
 }
 
