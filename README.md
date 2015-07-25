@@ -23,10 +23,7 @@ To do that, follow this **instructions**:
 
 2. Choose the start page (page you'll first get... then the script will start fetching all related pages).
 
-3. Run the beginParse script like this
-```bash
-./beginParse HomePage
-```
+3. Run the beginParse script like this **./beginParse HomePage**
 
 4. If everything goes ok, you'll end up getting your pages. Sometimes, you'll get error messages saying that you may want to blacklist some page.
 In this case, you can put in blacklist.txt all the pages you want to blacklist.
@@ -34,10 +31,7 @@ The script will provide some pages returning errors on newBlacklist.txt. You can
 
 5. Repeat step 3 until the script finished ok.
 
-6. Run the "fix-links.php" script by executing
-```bash
-php fix-links.php
-```
+6. Run the "fix-links.php" script by executing: **php fix-links.php**
 
 7. Now you'll have a folder named data with a bunch of .md files that you can upload to Github Wikis using some git clients, or any other method you like.
 
