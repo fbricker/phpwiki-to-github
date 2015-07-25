@@ -1,7 +1,7 @@
 <?php
 require_once 'common.php';
 global $base;
-$base = "http://your-wiki-host.com/convert/?page=";
+$base = "http://your-wiki-host.com/export/?page=";
 
 function getDataBetweenTokens($data,$open,$close){
 	$arr = explode($open," ".$data);
