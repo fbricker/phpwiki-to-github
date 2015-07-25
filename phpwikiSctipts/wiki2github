@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# 
+# mime2mdwn - Convert MIME format wiki export (developed for PhpWiki exports) to Markdown
+# 
+
+# globals
+debug=true
+
+# the actual heavy lifting
+function convert_mime_to_markdown() {
+	local in_header=false
+	local boundary='idsajhfkjafhskdhasjdf'
+	local version=0
+	local data=''
+	local data_version=0
+	while IFS=$IFS$'\r' read -r line; do
+		data="${data}${line}"$'\n'
+	done < "$1"
+	#printf "DATA (VERSION %s; pre-markup conversion):\n%s" "$data_version" "$data"
+	
+	# convert CamelCase (starting w/capital; e.g. "NewtonNewbieGuide") to wiki links (e.g. "[[NewtonNewbieGuide]]")
+	data=$(echo -n "$data" | perl -pe "s/(^|\b|_)((?<![\[|])[A-Z][a-z]+[A-Z][A-Za-z]+(?![\]|]))($|\b|_)/\1\[\[\2\]\]\3/g")
+	
+	# convert non-URI links in square brackets (e.g. "[NewtonConnectivityCD]") to wiki links (e.g. "[[NewtonConnectivityCD]]"
+	#data=$(echo -n "$data" | sed -E "s/([^[])\[([^\s]+)\]([^]])/\1\[\[\2\]\]\3/g")
+	data=$(echo -n "$data" | perl -pe "s/((?<!\[)\[[A-Za-z0-9]+\](?!\]))/\[\1\]/g")
+	
+	# convert non-URI, named links in square brackets  (e.g. "[BluetoothConnection|UsingBluetoothIndex]") to Markdown link format (e.g. "[BluetoothConnection](/UsingBluetoothIndex)")
+	data=$(echo -n "$data" | perl -pe "s/(?<!\[)\[(.+)\s?\|\s?([A-Za-z0-9]+)\](?!\])/[\1](\2)/g")
+	
+	# convert URI, named links in square brackets (e.g. "[Newtontalk.net|http://www.newtontalk.net/]") to Markdown link format (e.g. "[Newtontalk.net](http://www.newtontalk.net/)")
+	data=$(echo -n "$data" | perl -pe "s/(?<!\[)\[(.+)\s?\|\s?([A-Za-z]+:(\/\/)?.+)\](?!\])/[\1](\2)/g")
+	
+	# convert URI-only links in square brackets (e.g. "[http://tools.unna.org/glossary/]") to angle bracket format (e.g. "<http://tools.unna.org/glossary/>")
+	data=$(echo -n "$data" | perl -pe "s/(?<!\[)\[([A-Z-a-z]+:(\/\/)?.+)\](?!\])/<\1>/g")
+	
+	# convert triple prime bold (e.g. "'''bold'''") to Markdown format (e.g. "__bold__")
+	data=$(echo -n "$data" | perl -pe "s/(?<!')'''(.+)'''(?!')/__\1__/g")
+	
+	# convert double prime emphasis (e.g. "''emphasis''") to Markdown format (e.g. "_emphasis_")
+	data=$(echo -n "$data" | perl -pe "s/(?<!')''(.+)''(?!')/_\1_/g")
+	
+	# convert headings (e.g. "!!Heading") to Markdown atk-style format (e.g. "## Heading")
+	data=$(echo -n "$data" | perl -pe "s/^!{1}([^!]+)$/# \1/g")
+	data=$(echo -n "$data" | perl -pe "s/^!{2}([^!]+)$/## \1/g")
+	data=$(echo -n "$data" | perl -pe "s/^!{3}([^!]+)$/### \1/g")
+	data=$(echo -n "$data" | perl -pe "s/^!{4}([^!]+)$/#### \1/g")
+	data=$(echo -n "$data" | perl -pe "s/^!{5}([^!]+)$/##### \1/g")
+	data=$(echo -n "$data" | perl -pe "s/^!{6}([^!]+)$/###### \1/g")
+	
+	# printf "DATA (VERSION %s; post-markup conversion):\n%s" "$data_version" "$data"
+	
+	# write the data back out to the file
+	echo -n "$data" > "$1"
+}
+
+# batch process a directory of files?
+if [ -d "$1" ]; then
+	for file in $1/*; do
+		if [ ! -d "$file" ]; then
+			convert_mime_to_markdown "$file"
+		fi
+	done
+# or just a single file?
+elif [ -e "$1" ]; then
+	convert_mime_to_markdown "$1"
+# if no file/directory, throw an error
+else
+	printf "ERROR! %s not found!\n" "$1"
+fi
