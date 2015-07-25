@@ -37,3 +37,15 @@ php fix-links.php
 **NOTE:** Please note that this scripts are extremely beta, and you should use it with care. I made them to port some wiki pages (not as a nice-strong project).
 If you consider you need to modify some parts, most probably you're right. Just do it :)
 
+###Disclaimer
+
+GitHub is a registered trademark of Github, Inc.
+http://unibrander.com/united-states/1872043US/github.html
+
+###License
+
+The MIT License (MIT) - [LICENSE.md](LICENSE.md)
+
+Copyright &copy; 2015 Federico Bricker
+
+Author: Federico Bricker
