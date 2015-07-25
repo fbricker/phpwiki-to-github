@@ -5,8 +5,14 @@ This repository contains some scripts that will help you to migrate PHPWIKI to a
 
 The script connects directly to the database of PHP Wiki and extracts the source code of your wiki pages converting them to .md (markdown) files.
 
-Basically, what you need to do is to copy the "convert" folter into your phpwiki host.
+Basically, what you need to do is to copy the files inside "phpwikiScripts" folder into your phpwiki host on some folder named as you wish (for example: export).
+
 Then you need to setup the index.php file (setting database host, user and password).
+
+To check that you've done this step correctly, you can open this URL on your browser and check it displays your HomePage in markdown language:
+```
+http://www.your-wiki-host.com/export/?page=HomePage
+```
 
 Once you do that, you can use the scripts on the base folder to start converting your wiki.
 
