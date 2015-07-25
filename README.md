@@ -12,6 +12,7 @@ Then you need to setup the index.php file (setting database host, user and passw
 To check that you've done this step correctly, you can open this URL on your browser and check it displays your HomePage in markdown language:
 ```
 http://www.your-wiki-host.com/export/?page=HomePage
+** Note that you should see this page using the "view source code" mode, if you want to see the file as is **
 ```
 
 Once you do that, you can use the scripts on the base folder to start converting your wiki.
