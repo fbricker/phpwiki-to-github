@@ -14,6 +14,7 @@ function isBlacklisted($page){
 	global $blacklist;
 	if(strpos($page,"http://")===0) return true;
 	if(strpos($page,"https://")===0) return true;
+	if(strpos($page,"#")===0) return true;
 	return in_array(utf8_encode($page), $blacklist);
 }
 
@@ -32,6 +33,8 @@ function getDataBetweenTokens($data,$open,$close){
 }
 
 function parsePage($data){
+	$data=str_replace("#[|","[",$data);
+	$data=str_replace("~[","",$data);
 	$links1 = getDataBetweenTokens($data,"[[","]]");
 	$links2 = getDataBetweenTokens($data,"](",")");
 	$links3 = getDataBetweenTokens($data,"|","]");

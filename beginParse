@@ -1,0 +1,17 @@
+#!/bin/bash
+dir=`dirname "$0"`
+cd "$dir"
+
+counter=5
+
+./clear
+while [ ! -f "newBlacklist.txt" -a $counter -gt 0 ]; do
+	php parse.php
+	counter=`expr $counter - 1`
+done
+
+if [ ! -f "newBlacklist.txt" ]; then
+	echo "Finalizo con exito... pero quedaban $counter loops"
+else
+	echo "Encontre cosas para la Blacklist"
+fi
