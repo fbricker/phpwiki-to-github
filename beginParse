@@ -2,7 +2,7 @@
 dir=`dirname "$0"`
 cd "$dir"
 
-counter=5
+counter=7
 
 ./clear
 while [ ! -f "newBlacklist.txt" -a $counter -gt 0 ]; do
