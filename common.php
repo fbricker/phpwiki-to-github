@@ -58,10 +58,15 @@ function removeAccents($cadena){
 }
 
 function normalizeName($name){
-    $name = strip_tags(str_replace(array("\r","\t","\n","@","[","]",":",";",'"',"'"," ","“","”","`","´","?","¿","%","/"),'-',$name));
-    return removeAccents(preg_replace('/[\-]{2,}/','-',$name));
+    $name = strip_tags(str_replace(array("\r","\t","\n","@","[","]",";",'"',"'","“","”","`","´","?","¿","%"),'-',$name));
+    // ," ","/",":"
+    $name = preg_replace('/[\-]{2,}/','-',$name);
+    return utf8_encode($name);
 }
 
 function getFileName($page){
-	return "data/".$page['normal'].".md";
+	$res = "data/".$page['normal'].".md";
+	$dir = dirname($res);
+	@mkdir($dir,0777,true);
+	return $res;
 }

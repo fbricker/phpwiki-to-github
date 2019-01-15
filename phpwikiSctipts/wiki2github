@@ -24,10 +24,10 @@ function convert_mime_to_markdown() {
 	
 	# convert non-URI links in square brackets (e.g. "[NewtonConnectivityCD]") to wiki links (e.g. "[[NewtonConnectivityCD]]"
 	#data=$(echo -n "$data" | sed -E "s/([^[])\[([^\s]+)\]([^]])/\1\[\[\2\]\]\3/g")
-	data=$(echo -n "$data" | perl -pe "s/((?<!\[)\[[A-Za-z0-9]+\](?!\]))/\[\1\]/g")
+	data=$(echo -n "$data" | perl -pe "s/((?<!\[)\[[ \/:_\-\p{L}0-9]+\](?!\]))/\[\1\]/g")
 	
 	# convert non-URI, named links in square brackets  (e.g. "[BluetoothConnection|UsingBluetoothIndex]") to Markdown link format (e.g. "[BluetoothConnection](/UsingBluetoothIndex)")
-	data=$(echo -n "$data" | perl -pe "s/(?<!\[)\[(.+)\s?\|\s?([A-Za-z0-9]+)\](?!\])/[\1](\2)/g")
+	data=$(echo -n "$data" | perl -pe "s/(?<!\[)\[(.+)\s?\|\s?([ #\/:_\-\p{L}0-9]+)\](?!\])/[\1](\2)/g")
 	
 	# convert URI, named links in square brackets (e.g. "[Newtontalk.net|http://www.newtontalk.net/]") to Markdown link format (e.g. "[Newtontalk.net](http://www.newtontalk.net/)")
 	data=$(echo -n "$data" | perl -pe "s/(?<!\[)\[(.+)\s?\|\s?([A-Za-z]+:(\/\/)?.+)\](?!\])/[\1](\2)/g")
